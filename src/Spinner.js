@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -10,12 +10,7 @@ const styles = theme => ({
 });
 
 function CircularIndeterminate(props) {
-  const { classes } = props;
-  return (
-    <Fragment>
-      <CircularProgress className={classes.progress} />
-    </Fragment>
-  );
+  return <CircularProgress className={props.classes.progress} />;
 }
 
 CircularIndeterminate.propTypes = {

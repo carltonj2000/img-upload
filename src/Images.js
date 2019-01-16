@@ -5,8 +5,7 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import { Images } from "./tileData";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForeverOutlined";
 
 const styles = theme => ({
   root: {
@@ -28,13 +27,12 @@ const styles = theme => ({
       "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
   },
   icon: {
-    color: "white"
+    color: "red"
   }
 });
 
 function AdvancedGridList(props) {
-  const { classes } = props;
-  const tileData = Images();
+  const { classes, tileData, removeImage } = props;
   return (
     <div className={classes.root}>
       <GridList cellHeight={200} spacing={1} className={classes.gridList}>
@@ -49,11 +47,14 @@ function AdvancedGridList(props) {
               title={tile.title}
               titlePosition="top"
               actionIcon={
-                <IconButton className={classes.icon}>
-                  <StarBorderIcon />
+                <IconButton
+                  className={classes.icon}
+                  onClick={() => removeImage(tile.title)}
+                >
+                  <DeleteForeverIcon />
                 </IconButton>
               }
-              actionPosition="left"
+              actionPosition="right"
               className={classes.titleBar}
             />
           </GridListTile>

@@ -12,5 +12,6 @@ for (let i = 0; i < imgsSrc.length; i++) {
 
   const dirDst = path.dirname(imgDst);
   if (!fs.existsSync(dirDst)) fs.mkdirSync(dirDst, { recursive: true });
+  execSync(`unlink -f ${imgDst}`, { stdio: "inherit" });
   execSync(`ln -s ${imgSrc} ${imgDst}`, { stdio: "inherit" });
 }

@@ -1,6 +1,7 @@
 const antelope = "pics2019/antelope/";
 
 const locations = {
+  localstorage: { directory: "/images/" },
   localweb: { directory: "/images/" + antelope },
   local: {
     directory:
@@ -12,7 +13,7 @@ const locations = {
   }
 };
 
-const Images = (location = locations.localweb) => {
+const ImagesInfo = (location = locations.localstorage) => {
   const dir = location.directory;
   return [
     {
@@ -31,6 +32,6 @@ const Images = (location = locations.localweb) => {
 };
 
 module.exports = {
-  Images,
+  ImagesInfo,
   locations
 };
