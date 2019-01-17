@@ -13,6 +13,7 @@ const locations = {
   }
 };
 
+let public_id = 1;
 const ImagesInfo = (location = locations.localstorage) => {
   const dir = location.directory;
   return [
@@ -20,13 +21,22 @@ const ImagesInfo = (location = locations.localstorage) => {
       img: dir + "20190108094950_IMG_4574.jpg",
       title: "20190108094950_IMG_4574.jpg",
       author: "author1",
-      cols: 2
+      cols: 1,
+      public_id: public_id++
     },
     {
       img: dir + "20190108095037_IMG_4575.jpg",
       title: "220190108095037_IMG_4575.jpg",
       author: "author2",
-      cols: 1
+      cols: 1,
+      public_id: public_id++
+    },
+    {
+      img: dir + "20190108095058_IMG_4576.jpg",
+      title: "20190108095058_IMG_4576.jpg",
+      author: "author2",
+      cols: 1,
+      public_id: public_id++
     }
   ];
 };

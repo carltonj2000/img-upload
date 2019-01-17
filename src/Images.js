@@ -44,12 +44,12 @@ function AdvancedGridList(props) {
           >
             <img src={tile.img} alt={tile.title} />
             <GridListTileBar
-              title={tile.title}
+              title={`${tile.public_id} ${tile.title}`}
               titlePosition="top"
               actionIcon={
                 <IconButton
                   className={classes.icon}
-                  onClick={() => removeImage(tile.title)}
+                  onClick={() => removeImage(tile.public_id)}
                 >
                   <DeleteForeverIcon />
                 </IconButton>

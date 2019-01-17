@@ -14,11 +14,11 @@ const styles = theme => ({
 });
 
 function IconLabelButtons(props) {
-  const { classes } = props;
+  const { classes, onChange, uploadFiles } = props;
   return (
     <Button variant="contained" color="default" className={classes.button}>
-      <input type="file" id="multi" onChange={props.onChange} multiple />
-      <CloudUploadIcon className={classes.rightIcon} />
+      <input type="file" id="multi" onChange={onChange} multiple />
+      <CloudUploadIcon className={classes.rightIcon} onClick={uploadFiles} />
     </Button>
   );
 }
