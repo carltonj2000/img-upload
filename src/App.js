@@ -58,10 +58,10 @@ class App extends Component {
     const formData = new FormData();
 
     files.forEach((file, i) => {
-      formData.append(i, file);
+      formData.append("avatar", file);
     });
-
-    fetch(`api/image-upload`, {
+    console.log(formData);
+    fetch(`/api/profile`, {
       method: "POST",
       body: formData
     })
@@ -84,6 +84,10 @@ class App extends Component {
       <Fragment>
         <CssBaseLine />
         <SimpleAppBar />
+        <form action="/api/profile" method="post" enctype="multipart/form-data">
+          <input type="file" name="avatar" />
+          <input type="submit" value="Submit" />
+        </form>
         {(() => {
           switch (true) {
             case uploading:

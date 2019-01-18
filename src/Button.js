@@ -18,6 +18,7 @@ function IconLabelButtons(props) {
   return (
     <Button variant="contained" color="default" className={classes.button}>
       <input type="file" id="multi" onChange={onChange} multiple />
+      <input type="file" id="single" onChange={onChange} />
       <CloudUploadIcon className={classes.rightIcon} onClick={uploadFiles} />
     </Button>
   );
