@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const app = express();
-const upload = multer();
 const moment = require("moment");
 
 app.use((req, res, next) => {
@@ -14,10 +13,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../build")));
 
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "/Volumes/cjs/cj/volume_sfo2_02/cjWorking/img-upload-storage");
+  },
+  filename: function(req, file, cb) {
+    cb(null, moment().format("YYYYMMDD-hhmmss") + "-" + file.originalname);
+  }
+});
+const upload = multer({ storage });
+
 app.post("/api/file-upload", upload.single("myFile"), function(req, res, next) {
-  console.log(req.file);
-  console.log(req.file.buffer.toString());
-  res.send({ status: "ok" });
+  const file = req.file;
+  if (!file) {
+    const error = new Error("Please choose a file");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send({ status: "Ok" });
 });
 
 app.post("/api/files-upload", upload.array("myFiles", 12), (req, res, next) => {
@@ -28,11 +41,6 @@ app.post("/api/files-upload", upload.array("myFiles", 12), (req, res, next) => {
     return next(error);
   }
 
-  console.log(files);
-
-  for (let i = 0; i < files.length; i++) {
-    console.log(files[i].buffer.toString());
-  }
   res.send({ status: "ok" });
 });
 
