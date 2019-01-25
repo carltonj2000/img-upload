@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const app = express();
 const moment = require("moment");
+const fs = require("fs");
 
 const imgStrLocation =
   "/Volumes/cjs/cj/volume_sfo2_02/cjWorking/img-upload-storage";
@@ -58,6 +59,18 @@ app.post("/api/files-upload", upload.array("myFiles", 12), (req, res, next) => {
     filename: file.filename
   }));
   res.send({ status: "Ok", fileIds });
+});
+
+app.get("/api/images", (req, res) => {
+  fs.readdir(imgStrLocation, (err, items) => {
+    const files = [];
+    if (err) return res.send({ error: `failed reading ${imgStrLocation}` });
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (/\.(gif|jpe?g|tiff|png)$/i.test(item)) files.push(item);
+    }
+    res.send({ files, items });
+  });
 });
 
 const port = process.env.PORT || 5000;

@@ -31,6 +31,16 @@ const styles = theme => ({
 class App extends Component {
   state = { images: [] };
 
+  componentDidMount = () => {
+    fetch("/api/images")
+      .then(res => res.json())
+      .then(result => {
+        if (result && result.error)
+          return console.log("Initial fetch from /api/images failed!");
+        console.log(result);
+      })
+      .catch(e => console("Initial fetch from /api/images errored out!", e));
+  };
   removeImage = id => {
     this.setState({
       images: this.state.images.filter(image => image.public_id !== id)
