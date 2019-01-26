@@ -35,16 +35,30 @@ class App extends Component {
     fetch("/api/images")
       .then(res => res.json())
       .then(result => {
-        if (result && result.error)
-          return console.log("Initial fetch from /api/images failed!");
-        console.log(result);
+        if ((result && result.error) || result.status !== "Ok")
+          return console.log("Server error!", result.error);
+        const images = result.files.map(t => ({ img: t }));
+        this.setState({ images });
       })
-      .catch(e => console("Initial fetch from /api/images errored out!", e));
+      .catch(e =>
+        console.log("Initial fetch from /api/images errored out!", e)
+      );
+  };
+  addImages = images => {
+    if (!images || images.length === 0) return;
+    this.setState(state => ({ images: [...images, ...state.images] }));
   };
   removeImage = id => {
-    this.setState({
-      images: this.state.images.filter(image => image.public_id !== id)
-    });
+    fetch(`/api/images/remove?file=${id}`)
+      .then(res => res.json())
+      .then(result => {
+        if ((result && result.error) || result.status !== "Ok")
+          return console.log(result.error);
+        this.setState({
+          images: this.state.images.filter(image => image.img !== id)
+        });
+      })
+      .catch(e => console.log("Deleting image failed.", e));
   };
 
   render() {
@@ -53,12 +67,10 @@ class App extends Component {
       <Fragment>
         <CssBaseLine />
         <SimpleAppBar />
-        <UploadFiles />
-        {(() => {
-          if (images.length > 0)
-            return <Images tileData={images} removeImage={this.removeImage} />;
-          else return null;
-        })()}
+        <UploadFiles addImages={this.addImages} />
+        {images.length > 0 ? (
+          <Images tileData={images} removeImage={this.removeImage} />
+        ) : null}
       </Fragment>
     );
   }

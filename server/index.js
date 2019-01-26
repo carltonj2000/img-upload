@@ -27,23 +27,6 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post("/api/file-upload", upload.single("myFile"), function(req, res, next) {
-  const file = req.file;
-  if (!file) {
-    /*
-    const error = new Error("Please choose a file");
-    error.httpStatusCode = 400;
-    return next(error);
-    */
-    return res.send({ status: "Fail", msg: "No file sent." });
-  }
-  const fileId = {
-    originalname: file.originalname,
-    filename: file.filename
-  };
-  res.send({ status: "Ok", fileId });
-});
-
 app.post("/api/files-upload", upload.array("myFiles", 12), (req, res, next) => {
   const files = req.files;
   if (!files || files.length === 0) {
@@ -55,10 +38,18 @@ app.post("/api/files-upload", upload.array("myFiles", 12), (req, res, next) => {
     return res.send({ status: "Fail", msg: "No files selected." });
   }
   const fileIds = files.map(file => ({
-    originalname: file.originalname,
-    filename: file.filename
+    img: file.filename
   }));
   res.send({ status: "Ok", fileIds });
+});
+
+app.get("/api/images/remove", (req, res) => {
+  if (!req.query.file) return res.send({ error: "file parameter required" });
+  const file = path.join(imgStrLocation, req.query.file);
+  if (!fs.existsSync(file))
+    return res.send({ error: `file not found => ${file}` });
+  fs.unlinkSync(file);
+  res.send({ status: "Ok", file, details: "file removed" });
 });
 
 app.get("/api/images", (req, res) => {
@@ -69,7 +60,7 @@ app.get("/api/images", (req, res) => {
       const item = items[i];
       if (/\.(gif|jpe?g|tiff|png)$/i.test(item)) files.push(item);
     }
-    res.send({ files, items });
+    res.send({ status: "Ok", files, items }); // TODO send extra db info with file
   });
 });
 

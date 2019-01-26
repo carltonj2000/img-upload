@@ -39,7 +39,6 @@ const styles = theme => ({
 class UploadFiles extends Component {
   state = {
     uploading: false,
-    images: [],
     snackOpen: false,
     files: [],
     error: null
@@ -55,12 +54,10 @@ class UploadFiles extends Component {
     const { files } = this.state;
     const formData = new FormData();
 
-    const name = files.length === 1 ? "myFile" : "myFiles";
     files.forEach(file => {
-      formData.append(name, file);
+      formData.append("myFiles", file);
     });
-    const url = files.length === 1 ? "/api/file-upload" : "/api/files-upload";
-    fetch(url, {
+    fetch("/api/files-upload", {
       method: "POST",
       body: formData,
       header: { encType: "multipart/form-data" }
@@ -73,12 +70,8 @@ class UploadFiles extends Component {
             snackOpen: true,
             error: upload.msg
           });
-        console.log(upload);
-        this.setState({
-          uploading: false,
-          files: [],
-          images: upload.fileIds
-        });
+        this.props.addImages(upload.fileIds);
+        this.setState({ uploading: false, files: [] });
       })
       .catch(e => {
         console.error(e);
